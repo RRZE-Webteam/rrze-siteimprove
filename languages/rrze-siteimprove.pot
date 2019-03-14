@@ -1,0 +1,128 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: RRZE Siteimprove\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-06 14:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: rrze-siteimprove.php:72
+#, php-format
+msgid ""
+"Your server is running PHP version %s. Please upgrade at least to PHP "
+"version %s."
+msgstr ""
+
+#: rrze-siteimprove.php:76
+#, php-format
+msgid ""
+"Your Wordpress version is %s. Please upgrade at least to Wordpress version "
+"%s."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:35 RRZE/Siteimprove/Settings.php:47
+msgid "Siteimprove"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:66
+msgid "Integration"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:67 RRZE/Siteimprove/Settings.php:72
+msgid "Enable"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:68
+msgid "Token"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:69
+msgid "Badge Role"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:71
+msgid "Analytics"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:73
+msgid "Code"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:104
+msgid ""
+"You can scan your website for errors as soon as a page is published, "
+"allowing you to fix mistakes, optimize content, and manage your site more "
+"efficiently."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:108
+msgid ""
+"Get insight into visitor behavior and optimize your website with powerful "
+"analytics that anyone can use."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:109
+msgid ""
+"Use the shortcode [siteimprove_analytics_privacy_policy] to display the "
+"corresponding privacy policy with an opt-out button."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:132
+msgid "Request new token"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:146
+msgid "User role required to display the Siteimprove Badge."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:170
+msgid "The code that is specific to your account."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:181
+msgid "Here comes the Context Help content."
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:187
+msgid "Overview"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:191
+msgid "For more information"
+msgstr ""
+
+#: RRZE/Siteimprove/Settings.php:191
+msgid "RRZE Webteam on Github"
+msgstr ""
+
+#: RRZE/Siteimprove/Integration.php:102
+msgid "Siteimprove Recheck"
+msgstr ""
+
+#. Name of the plugin
+msgid "RRZE Siteimprove"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integration mit Siteimprove."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://gitlab.rrze.fau.de/rrze-webteam/rrze-siteimprove"
+msgstr ""
+
+#. Author of the plugin
+msgid "RRZE-Webteam"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://blogs.fau.de/webworking/"
+msgstr ""
