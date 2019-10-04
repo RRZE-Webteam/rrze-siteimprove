@@ -14,13 +14,13 @@ defined('ABSPATH') || exit;
 <p>These are the cookies used by Siteimprove on this website:</p>
 
 <ul>
- 	<li><strong>Cookie name</strong>: <b>nmstat</b>
+ 	<li><strong>Cookie name</strong>: <code>nmstat</code>
 <ul>
  	<li><strong>Type</strong>: Persistent - expires after 1000 days</li>
  	<li><strong>About</strong>: This cookie is used to help record visitors' use of the website. It is used to collect statistics about site usage such as when the visitor last visited the site. The cookie contains no personal information and is used only for web analytics.</li>
 </ul>
 </li>
- 	<li><strong>Cookie name</strong>: <b>siteimproveses</b>
+ 	<li><strong>Cookie name</strong>: <code>siteimproveses</code>
 <ul>
  	<li><strong>Type</strong>: Session cookie</li>
  	<li><strong>About</strong>: This cookie is used purely to track the sequence of pages a visitor looks at during a visit to the site.</li>

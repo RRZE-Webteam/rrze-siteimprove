@@ -14,13 +14,13 @@ defined('ABSPATH') || exit;
 <p>Diese Cookies von Siteimprove werden auf dieser Website eingesetzt:</p>
 
 <ul>
- 	<li><strong>Name des Cookies</strong>: <b>nmstat </b>
+ 	<li><strong>Name des Cookies</strong>: <code>nmstat </code>
 <ul>
  	<li><strong>Typ</strong>: Persistent – läuft nach 1000 Tagen ab</li>
  	<li><strong>Über das Cookie</strong>: Dieses Cookie wird genutzt, um das Verhalten der Besucher auf der Website festzuhalten. Es wird genutzt um Statistiken über die Websitenutzung zu sammeln, wie zum Beispiel wann der Besucher die Website zuletzt besucht hat. Das Cookie enthält keine personenbezogenen Daten und wird einzig für die Websiteanalyse eingesetzt.</li>
 </ul>
 </li>
- 	<li><strong>Name des Cookies</strong>: <b>siteimproveses </b>
+ 	<li><strong>Name des Cookies</strong>: <code>siteimproveses </code>
 <ul>
  	<li><strong>Typ</strong>: Sitzungscookie</li>
  	<li><strong>Über das Cookie</strong>: Dieses Cookie wird dafür eingesetzt, um die Abfolge an Seiten zu verfolgen, die ein Besucher im Laufe seines Besuchs auf der Website ansieht. Das Cookie enthält keine personenbezogenen Daten und wird einzig für die Websiteanalyse eingesetzt.</li>
