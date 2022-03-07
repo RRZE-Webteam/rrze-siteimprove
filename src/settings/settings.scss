@@ -1,0 +1,20 @@
+.spinner.no-float {
+    float: none;
+    vertical-align: top;
+}
+
+.recheck-button-wrapper {
+    border-top: 1px solid #ddd;
+    clear: both;
+    margin-top: 1em;
+    padding-top: 1em;
+
+    input {
+        width: 100%;
+    }
+}
+
+#edittag .submit .button-primary {
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
