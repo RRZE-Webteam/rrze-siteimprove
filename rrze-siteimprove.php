@@ -1,97 +1,168 @@
 <?php
 
-/**
- * Plugin Name:     RRZE Siteimprove
- * Plugin URI:      https://github.com/RRZE-Webteam/rrze-siteimprove
- * Description:     Integration mit Siteimprove.
- * Version:         1.5.2
- * Author:          RRZE-Webteam
- * Author URI:      https://www.rrze.fau.de
- * License:         GNU General Public License v2
- * License URI:     http://www.gnu.org/licenses/gpl-2.0.html
- * Domain Path:     /languages
- * Text Domain:     rrze-siteimprove
- */
+/*
+Plugin Name:     RRZE Siteimprove
+Plugin URI:      https://github.com/RRZE-Webteam/rrze-siteimprove
+Description:     Integration with Siteimprove.
+Version:         1.6.0
+Author:          RRZE-Webteam
+Author URI:      https://www.rrze.fau.de
+License:         GNU General Public License v2
+License URI:     http://www.gnu.org/licenses/gpl-2.0.html
+Domain Path:     /languages
+Text Domain:     rrze-siteimprove
+*/
 
 namespace RRZE\Siteimprove;
 
-use RRZE\Siteimprove\Main;
-
 defined('ABSPATH') || exit;
 
-const RRZE_PHP_VERSION = '7.1';
-const RRZE_WP_VERSION = '5.0';
+const RRZE_PHP_VERSION = '7.4';
+const RRZE_WP_VERSION  = '5.9';
 
-// Automatische Laden von Klassen.
-require_once 'autoload.php';
-
-register_activation_hook(__FILE__, 'RRZE\Siteimprove\activation');
-register_deactivation_hook(__FILE__, 'RRZE\Siteimprove\deactivation');
-
-add_action('plugins_loaded', 'RRZE\Siteimprove\loaded');
-
-/*
- * Einbindung der Sprachdateien.
+/**
+ * SPL Autoloader (PSR-4).
+ * @param string $class The fully-qualified class name.
  * @return void
  */
-function load_textdomain()
+spl_autoload_register(function ($class) {
+    $prefix = __NAMESPACE__;
+    $baseDir = __DIR__ . '/includes/';
+
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        return;
+    }
+
+    $relativeClass = substr($class, $len);
+    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
+// Register plugin hooks.
+register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
+register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
+
+add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+
+/**
+ * Loads a plugin’s translated strings.
+ */
+function loadTextdomain()
 {
-    load_plugin_textdomain('rrze-siteimprove', false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
+    load_plugin_textdomain('rrze-siteimprove', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }
 
-/*
- * Wird durchgeführt, nachdem das Plugin aktiviert wurde.
- * @return void
+/**
+ * System requirements verification.
+ * @return string Return an error message.
+ */
+function systemRequirements(): string
+{
+    $error = '';
+    if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
+        $error = sprintf(
+            /* translators: 1: Server PHP version number, 2: Required PHP version number. */
+            __('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'rrze-siteimprove'),
+            PHP_VERSION,
+            RRZE_PHP_VERSION
+        );
+    } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
+        $error = sprintf(
+            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
+            __('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'rrze-siteimprove'),
+            $GLOBALS['wp_version'],
+            RRZE_WP_VERSION
+        );
+    }
+    return $error;
+}
+
+/**
+ * Activation callback function.
  */
 function activation()
 {
-    // Sprachdateien werden eingebunden.
-    load_textdomain();
-
-    // Überprüft die minimal erforderliche PHP- u. WP-Version.
-    system_requirements();
+    loadTextdomain();
+    if ($error = systemRequirements()) {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_die(
+            sprintf(
+                /* translators: 1: The plugin name, 2: The error string. */
+                __('Plugins: %1$s: %2$s', 'rrze-siteimprove'),
+                plugin_basename(__FILE__),
+                $error
+            )
+        );
+    }
 }
 
-/*
- * Wird durchgeführt, nachdem das Plugin deaktiviert wurde.
- * @return void
+/**
+ * Deactivation callback function.
  */
 function deactivation()
 {
+    // Nothing to do.
 }
 
-/*
- * Überprüft die minimal erforderliche PHP- u. WP-Version.
- * @return void
+/**
+ * Instantiate Plugin class.
+ * @return object Plugin
  */
-function system_requirements()
+function plugin()
 {
-    $error = '';
-
-    if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
-        $error = sprintf(__('Your server is running PHP version %s. Please upgrade at least to PHP version %s.', 'rrze-siteimprove'), PHP_VERSION, RRZE_PHP_VERSION);
+    static $instance;
+    if (null === $instance) {
+        $instance = new Plugin(__FILE__);
     }
 
-    if (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
-        $error = sprintf(__('Your Wordpress version is %s. Please upgrade at least to Wordpress version %s.', 'rrze-siteimprove'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
-    }
-
-    // Wenn die Überprüfung fehlschlägt, dann wird das Plugin automatisch deaktiviert.
-    if (!empty($error)) {
-        deactivate_plugins(plugin_basename(__FILE__), false, true);
-        wp_die($error);
-    }
+    return $instance;
 }
 
-/*
- * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren
- * und alle Plugins eingebunden wurden.
+/**
+ * Instantiate Options class.
+ * @return object Plugin
+ */
+function settings()
+{
+    static $instance;
+    if (null === $instance) {
+        $instance = new Options();
+    }
+    return $instance;
+}
+
+/**
+ * Loaded callback function.
+ *
  * @return void
  */
 function loaded()
 {
-    // Sprachdateien werden eingebunden.
-    load_textdomain();
-    // Hauptklasse (Main) wird instanziiert.
-    return new Main(__FILE__);
+    add_action('init', __NAMESPACE__ . '\loadTextdomain');
+    plugin()->loaded();
+    if ($error = systemRequirements()) {
+        add_action('admin_init', function () use ($error) {
+            if (current_user_can('activate_plugins')) {
+                $pluginData = get_plugin_data(plugin()->getFile());
+                $pluginName = $pluginData['Name'];
+                $tag = is_plugin_active_for_network(plugin()->getBaseName()) ? 'network_admin_notices' : 'admin_notices';
+                add_action($tag, function () use ($pluginName, $error) {
+                    printf(
+                        '<div class="notice notice-error"><p>' .
+                            /* translators: 1: The plugin name, 2: The error string. */
+                            __('Plugins: %1$s: %2$s', 'rrze-siteimprove') .
+                            '</p></div>',
+                        esc_html($pluginName),
+                        esc_html($error)
+                    );
+                });
+            }
+        });
+        return;
+    }
+    new Main;
 }
