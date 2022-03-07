@@ -2,58 +2,69 @@
 
 namespace RRZE\Siteimprove\Analytics;
 
-use RRZE\Siteimprove\Main;
-
 defined('ABSPATH') || exit;
+
+use function RRZE\Siteimprove\plugin;
+use function RRZE\Siteimprove\settings;
 
 class Analytics
 {
-    protected $main;
-
     protected $options;
 
-    public function __construct(Main $main)
+    public function __construct()
     {
-        $this->main = $main;
-        $this->options = $this->main->options->get_options();
+        $this->options = settings()->getOptions();
 
-        add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts']);
+        add_filter('siteimprove_analytics_enabled', function () {
+            return $this->options->analytics_enable;
+        });
+
+        add_action('wp_enqueue_scripts', [$this, 'wpEnqueueScripts']);
         add_shortcode('siteimprove_analytics_privacy_policy', [$this, 'shortcode']);
     }
 
-    public function wp_enqueue_scripts()
+    public function wpEnqueueScripts()
     {
         if ($this->options->analytics_enable) {
-            wp_enqueue_script('rrze-siteimprove-analytics', plugins_url('js/siteimprove-analytics.min.js', $this->main->plugin_basename));
-            wp_localize_script('rrze-siteimprove-analytics', 'siteanalyze', [
-                'code' => $this->options->analytics_code
-            ]);
+            wp_enqueue_script(
+                'rrze-siteimprove-analytics',
+                plugins_url('dist/analytics.js', plugin()->getBasename()),
+                [],
+                plugin()->getVersion()
+            );
+            wp_localize_script(
+                'rrze-siteimprove-analytics',
+                'siteanalyze',
+                [
+                    'code' => $this->options->analytics_code
+                ]
+            );
         }
     }
 
     public function shortcode($atts)
     {
         $atts = shortcode_atts([
-    		'display' => 'true'
-    	], $atts);
+            'display' => 'true'
+        ], $atts);
 
         $display = $atts['display'] == 'true' ? true : false;
 
-    	if ($this->options->analytics_enable && $display) {
-            return $this->privacy_policy_content();
-    	}
+        if ($this->options->analytics_enable && $display) {
+            return $this->privacyPolicyContent();
+        }
 
         return '';
     }
 
-    protected function privacy_policy_content()
+    protected function privacyPolicyContent()
     {
-        $locale = $this->get_locale();
+        $locale = $this->getLocale();
         $file = dirname(__FILE__) . '/privacy-policy-' . $locale . '.php';
-        return $this->get_file_content($file);
+        return $this->getFileContent($file);
     }
 
-    protected function get_locale()
+    protected function getLocale()
     {
         $locale = get_locale();
         $locale_default = 'en_US';
@@ -76,7 +87,8 @@ class Analytics
         return $locale_default;
     }
 
-    protected function get_file_content($file = '') {
+    protected function getFileContent($file = '')
+    {
         if (file_exists($file)) {
             ob_start();
             include $file;
