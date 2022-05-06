@@ -15,17 +15,18 @@ class Analytics
     {
         $this->options = settings()->getOptions();
 
-        add_filter('siteimprove_analytics_enabled', function () {
-            return $this->options->analytics_enable;
-        });
-
         add_action('wp_enqueue_scripts', [$this, 'wpEnqueueScripts']);
         add_shortcode('siteimprove_analytics_privacy_policy', [$this, 'shortcode']);
     }
 
+    protected function isAnalyticEnabled()
+    {
+        return apply_filters('siteimprove_analytics_enabled', $this->options->analytics_enable);
+    }
+
     public function wpEnqueueScripts()
     {
-        if ($this->options->analytics_enable) {
+        if ($this->isAnalyticEnabled()) {
             wp_enqueue_script(
                 'rrze-siteimprove-analytics',
                 plugins_url('dist/analytics.js', plugin()->getBasename()),
@@ -50,7 +51,7 @@ class Analytics
 
         $display = $atts['display'] == 'true' ? true : false;
 
-        if ($this->options->analytics_enable && $display) {
+        if ($this->isAnalyticEnabled() && $display) {
             return $this->privacyPolicyContent();
         }
 
