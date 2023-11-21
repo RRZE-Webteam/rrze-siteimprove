@@ -20,7 +20,7 @@ class Integration
 
     /**
      * Settings Options.
-     * @var string
+     * @var object
      */
     protected $options;
 
