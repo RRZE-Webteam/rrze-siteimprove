@@ -4,7 +4,7 @@
 Plugin Name:     RRZE Siteimprove
 Plugin URI:      https://github.com/RRZE-Webteam/rrze-siteimprove
 Description:     Integration with Siteimprove.
-Version:         1.6.2
+Version:         1.6.3
 Author:          RRZE-Webteam
 Author URI:      https://www.rrze.fau.de
 License:         GNU General Public License v2
