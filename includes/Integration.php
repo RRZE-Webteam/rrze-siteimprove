@@ -91,7 +91,7 @@ class Integration
 
         switch ($pagenow) {
             case 'post.php':
-                $post_id = !empty($_GET['post']) ? (int) $_GET['post'] : 0;
+                $post_id = !empty($_GET['post']) ? absint($_GET['post']) : 0;
                 $permalink = get_permalink($post_id);
 
                 if ($permalink) {
@@ -105,12 +105,12 @@ class Integration
 
             case 'term.php':
             case 'edit-tags.php':
-                $tagId = !empty($_GET['tag_ID']) ? (int) $_GET['tag_ID'] : 0;
+                $tagId = !empty($_GET['tag_ID']) ? absint($_GET['tag_ID']) : 0;
                 $taxonomy = !empty($_GET['taxonomy']) ? sanitize_key($_GET['taxonomy']) : '';
 
                 if ($pagenow == 'term.php' || ($pagenow == 'edit-tags.php' && !empty($_GET['action']) && $_GET['action'] === 'edit')) {
-                    $this->addJs(get_term_link((int) $tagId, $taxonomy), 'siteimprove_input');
-                    $this->addJs(get_term_link((int) $tagId, $taxonomy), 'siteimprove_recheck_button');
+                    $this->addJs(get_term_link($tagId, $taxonomy), 'siteimprove_input');
+                    $this->addJs(get_term_link($tagId, $taxonomy), 'siteimprove_recheck_button');
                 }
                 break;
 
@@ -174,7 +174,7 @@ class Integration
     public function saveSessionUrlTerm($term_id, $tt_id, $taxonomy)
     {
         $urls = get_transient(self::TRANSIENT_URL . get_current_user_id());
-        $urls[] = get_term_link((int) $term_id, $taxonomy);
+        $urls[] = get_term_link($term_id, $taxonomy);
         set_transient(self::TRANSIENT_URL . get_current_user_id(), $urls, 900);
     }
 
