@@ -21,8 +21,7 @@ class Main
 
     public function headMeta()
     {
-        if (is_singular()) {
-            $post = get_post();
+        if (is_singular() && $post = get_queried_object()) {
             printf('<meta name="pageID" content="%d">%s', $post->ID, PHP_EOL);
         }
     }
