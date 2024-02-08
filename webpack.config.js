@@ -1,74 +1,48 @@
-const autoprefixer = require("autoprefixer");
-const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
-const CSSMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const webpack = require("webpack");
+const { basename, dirname, resolve } = require("path");
+const srcDir = "src";
+const settings = resolve(process.cwd(), "src", "settings");
+const siteimprove = resolve(process.cwd(), "src", "siteimprove");
+const analytics = resolve(process.cwd(), "src", "analytics");
 
-const path = require("path");
-const settings = path.join(__dirname, "src", "settings");
-const siteimprove = path.join(__dirname, "src", "siteimprove");
-const analytics = path.join(__dirname, "src", "analytics");
-
-module.exports = (env, argv) => {
-    function isDevelopment() {
-        return argv.mode === "development";
-    }
-    var config = {
-        entry: {
-            settings,
-            siteimprove,
-            analytics,
-        },
-        output: {
-            filename: "[name].js",
-            clean: true,
-        },
-        optimization: {
-            minimizer: [
-                new CSSMinimizerPlugin(),
-                new TerserPlugin({ terserOptions: { sourceMap: true } }),
-            ],
-        },
-        plugins: [
-            new MiniCSSExtractPlugin({
-                chunkFilename: "[id].css",
-                filename: (chunkData) => {
-                    return "[name].css";
+module.exports = {
+    ...defaultConfig,
+    entry: {
+        settings,
+        siteimprove,
+        analytics,
+    },
+    output: {
+        path: resolve(process.cwd(), "build"),
+        filename: "[name].js",
+        clean: true,
+    },
+    optimization: {
+        ...defaultConfig.optimization,
+        splitChunks: {
+            cacheGroups: {
+                style: {
+                    type: "css/mini-extract",
+                    test: /[\\/]style(\.module)?\.(pc|sc|sa|c)ss$/,
+                    chunks: "all",
+                    enforce: true,
+                    name(_, chunks, cacheGroupKey) {
+                        const chunkName = chunks[0].name;
+                        return `${dirname(chunkName)}/${basename(
+                            chunkName
+                        )}.${cacheGroupKey}`;
+                    },
                 },
-            }),
-        ],
-        devtool: isDevelopment() ? "cheap-module-source-map" : "source-map",
-        module: {
-            rules: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: "babel-loader",
-                            options: {
-                                presets: ["@babel/preset-env"],
-                            },
-                        },
-                    ],
-                },
-                {
-                    test: /\.(sa|sc|c)ss$/,
-                    use: [
-                        MiniCSSExtractPlugin.loader,
-                        "css-loader",
-                        {
-                            loader: "postcss-loader",
-                            options: {
-                                postcssOptions: {
-                                    plugins: [autoprefixer()],
-                                },
-                            },
-                        },
-                        "sass-loader",
-                    ],
-                },
-            ],
+                default: false,
+            },
         },
-    };
-    return config;
+    },
+    plugins: [
+        ...defaultConfig.plugins,
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+        }),
+    ],
 };

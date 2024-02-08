@@ -54,14 +54,15 @@ class Integration
         if ($hook == 'tools_page_rrze-siteimprove') {
             wp_enqueue_style(
                 'rrze-siteimprove-admin',
-                plugins_url('dist/settings.css', plugin()->getBasename()),
+                plugins_url('build/settings.css', plugin()->getBasename()),
                 [],
                 plugin()->getVersion()
             );
+            $assetFile = include(plugin()->getPath('build') . 'settings.asset.php');
             wp_enqueue_script(
                 'rrze-siteimprove-admin',
-                plugins_url('dist/settings.js', plugin()->getBasename()),
-                ['jquery'],
+                plugins_url('build/settings.js', plugin()->getBasename()),
+                $assetFile['dependencies'] ?? [],
                 plugin()->getVersion()
             );
         }
@@ -129,10 +130,11 @@ class Integration
      */
     private function addJs($url, $type, $auto = true, $txt = false)
     {
+        $assetFile = include(plugin()->getPath('build') . 'siteimprove.asset.php');
         wp_enqueue_script(
             'rrze-siteimprove',
-            plugins_url('dist/siteimprove.js', plugin()->getBasename()),
-            ['jquery'],
+            plugins_url('build/siteimprove.js', plugin()->getBasename()),
+            $assetFile['dependencies'] ?? [],
             plugin()->getVersion()
         );
         wp_localize_script(

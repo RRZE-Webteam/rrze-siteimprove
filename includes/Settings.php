@@ -8,6 +8,7 @@ class Settings
 {
     protected $optionName;
     protected $options;
+    protected $settingsMenu;
 
     public function __construct()
     {
