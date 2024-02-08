@@ -27,10 +27,11 @@ class Analytics
     public function wpEnqueueScripts()
     {
         if ($this->isAnalyticEnabled()) {
+            $assetFile = include(plugin()->getPath('build') . 'analytics.asset.php');
             wp_enqueue_script(
                 'rrze-siteimprove-analytics',
-                plugins_url('dist/analytics.js', plugin()->getBasename()),
-                [],
+                plugins_url('build/analytics.js', plugin()->getBasename()),
+                $assetFile['dependencies'] ?? [],
                 plugin()->getVersion()
             );
             wp_localize_script(
