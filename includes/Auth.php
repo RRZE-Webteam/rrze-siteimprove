@@ -4,19 +4,34 @@ namespace RRZE\Siteimprove;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Auth class
+ * 
+ * This class handles authentication with the Siteimprove API to retrieve a token.
+ * 
+ * @package RRZE\Siteimprove
+ * @since 1.0.0
+ */
 class Auth
 {
     /**
-     * Token Request URL
+     * The URL to request the Siteimprove token.
+     * 
+     * This URL is used to request a token from the Siteimprove API.
+     * 
      * @var string
      */
     const TOKEN_REQUEST_URL = 'https://my2.siteimprove.com/auth/token';
 
     /**
-     * Return Siteimprove token.
-     * @return mixed
+     * Request a new token from the Siteimprove API.
+     * 
+     * This method sends a request to the Siteimprove API to obtain a new token.
+     * It checks the response code and returns the token if successful, or false if not.
+     * 
+     * @return string|false The token if successful, false otherwise.
      */
-    public static function requestToken()
+    public static function requestToken(): string|false
     {
         // Request new token.
         $response = wp_remote_get(
@@ -27,6 +42,7 @@ class Auth
                 ]
             ]
         );
+
         // Check the response code.
         $responseCode = wp_remote_retrieve_response_code($response);
         $data = wp_remote_retrieve_body($response);

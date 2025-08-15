@@ -1,45 +1,20 @@
-const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const defaults = require("@wordpress/scripts/config/webpack.config");
 const webpack = require("webpack");
-const { basename, dirname, resolve } = require("path");
-const srcDir = "src";
-const settings = resolve(process.cwd(), "src", "settings");
-const siteimprove = resolve(process.cwd(), "src", "siteimprove");
-const analytics = resolve(process.cwd(), "src", "analytics");
 
+/**
+ * WP-Scripts Webpack config.
+ *
+ * @see https://developer.wordpress.org/block-editor/packages/packages-scripts/#provide-your-own-webpack-config
+ */
 module.exports = {
-    ...defaultConfig,
+    ...defaults,
     entry: {
-        settings,
-        siteimprove,
-        analytics,
-    },
-    output: {
-        path: resolve(process.cwd(), "build"),
-        filename: "[name].js",
-        clean: true,
-    },
-    optimization: {
-        ...defaultConfig.optimization,
-        splitChunks: {
-            cacheGroups: {
-                style: {
-                    type: "css/mini-extract",
-                    test: /[\\/]style(\.module)?\.(pc|sc|sa|c)ss$/,
-                    chunks: "all",
-                    enforce: true,
-                    name(_, chunks, cacheGroupKey) {
-                        const chunkName = chunks[0].name;
-                        return `${dirname(chunkName)}/${basename(
-                            chunkName
-                        )}.${cacheGroupKey}`;
-                    },
-                },
-                default: false,
-            },
-        },
+        analytics: "./src/analytics/index.js",
+        settings: "./src/settings/index.js",
+        siteimprove: "./src/siteimprove/index.js",
     },
     plugins: [
-        ...defaultConfig.plugins,
+        ...defaults.plugins,
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",

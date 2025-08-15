@@ -4,32 +4,59 @@ namespace RRZE\Siteimprove;
 
 defined('ABSPATH') || exit;
 
+use RRZE\Siteimprove\Options;
+use function RRZE\Siteimprove\plugin;
+
+/**
+ * Integration class
+ * 
+ * This class handles the integration of the Siteimprove plugin with WordPress.
+ * It includes methods for enqueuing scripts, saving session URLs, and adding JavaScript to the head section.
+ * 
+ * @package RRZE\Siteimprove
+ * @since 1.0.0
+ */
 class Integration
 {
     /**
-     * Siteimprove JS Library URL.
+     * JavaScript library URL for Siteimprove.
+     * 
+     * This URL points to the Siteimprove JavaScript library that is used for integration.
+     * It is loaded in the admin area to provide functionality for the Siteimprove plugin.
+     * 
      * @var string
      */
     const JS_LIBRARY_URL = 'https://cdn.siteimprove.net/cms/overlay.js';
 
     /**
-     * Transient URL Prefix.
+     * Transient key for storing URLs.
+     * 
+     * This constant defines the transient key used to store URLs for the current user.
+     * It is used to manage the URLs that need to be processed by the Siteimprove plugin.
+     * The URLs are stored in a transient to avoid excessive API calls and improve performance.
+     * 
      * @var string
      */
     const TRANSIENT_URL = 'siteimprove_url_';
 
     /**
-     * Settings Options.
-     * @var object
+     * Options
+     * 
+     * @var \stdClass
      */
     protected $options;
 
     /**
      * Constructor
+     * 
+     * This method initializes the Integration class, sets up the options, and registers hooks.
+     * It adds actions for admin initialization, saving session URLs, and including JavaScript in the head.
+     * 
+     * @return void
      */
     public function __construct()
     {
-        $this->options = settings()->getOptions();
+        $this->options = Options::getOptions();
 
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 
@@ -38,38 +65,59 @@ class Integration
         }
 
         add_action('admin_init', [$this, 'adminInit']);
+
         add_action('publish_page', [$this, 'saveSessionUrlPost']);
+
         add_action('publish_post', [$this, 'saveSessionUrlPost']);
+
         add_action('edit_term', [$this, 'saveSessionUrlTerm'], 10, 3);
+
         add_action('create_term', [$this, 'saveSessionUrlTerm'], 10, 3);
+
         add_action('transition_post_status', [$this, 'saveSessionUrlProduct'], 10, 3);
+
         add_action('wp_head', [$this, 'wpHead']);
     }
 
     /**
-     * Enqueue scripts and styles.
+     * Admin Enqueue Scripts.
+     * 
+     * This method enqueues the necessary scripts and styles for the admin area of the Siteimprove plugin.
+     * It checks if the current page is the settings page and loads the appropriate assets.
+     * 
+     * @param string $hook The current admin page hook.
+     * @return void
      */
     public function adminEnqueueScripts($hook)
     {
         if ($hook == 'tools_page_rrze-siteimprove') {
+            $assetFile = include(plugin()->getPath('build') . 'settings.asset.php');
+
             wp_enqueue_style(
                 'rrze-siteimprove-admin',
                 plugins_url('build/settings.css', plugin()->getBasename()),
                 [],
-                plugin()->getVersion()
+                $assetFile['version'] ?? plugin()->getVersion(),
             );
+
             $assetFile = include(plugin()->getPath('build') . 'settings.asset.php');
+
             wp_enqueue_script(
                 'rrze-siteimprove-admin',
                 plugins_url('build/settings.js', plugin()->getBasename()),
                 $assetFile['dependencies'] ?? [],
-                plugin()->getVersion()
+                $assetFile['version'] ?? plugin()->getVersion(),
             );
         }
     }
 
     /**
-     * Admin Init.
+     * Admin Initialization.
+     * 
+     * This method is called during the admin initialization phase.
+     * It checks if the user is not performing an AJAX request and if there are URLs stored in the transient.
+     * If URLs are found, it adds JavaScript to handle Siteimprove actions based on the URLs.
+     * 
      * @return void
      */
     public function adminInit()
@@ -121,22 +169,29 @@ class Integration
     }
 
     /**
-     * Add JS.
-     * @param string $url
-     * @param string $type
-     * @param bool $auto
-     * @param bool $text
+     * Add JavaScript to the page.
+     * 
+     * This method enqueues the Siteimprove JavaScript library and localizes it with the necessary data.
+     * It sets up the token, text, and URL for the Siteimprove integration.
+     * 
+     * @param string $url The URL to be processed by Siteimprove.
+     * @param string $type The type of action to be performed by Siteimprove (e.g., 'siteimprove_input', 'siteimprove_domain').
+     * @param bool $auto Whether to automatically include the JavaScript (default is true).
+     * @param string|false $txt Optional text for the recheck button (default is false).
+     * 
      * @return void
      */
     private function addJs($url, $type, $auto = true, $txt = false)
     {
         $assetFile = include(plugin()->getPath('build') . 'siteimprove.asset.php');
+
         wp_enqueue_script(
             'rrze-siteimprove',
             plugins_url('build/siteimprove.js', plugin()->getBasename()),
             $assetFile['dependencies'] ?? [],
-            plugin()->getVersion()
+            $assetFile['version'] ?? plugin()->getVersion(),
         );
+
         wp_localize_script(
             'rrze-siteimprove',
             esc_js($type),
@@ -146,6 +201,7 @@ class Integration
                 'url'   => $url,
             ]
         );
+
         wp_enqueue_script(
             'siteimprove_overlay',
             self::JS_LIBRARY_URL,
@@ -156,7 +212,14 @@ class Integration
     }
 
     /**
-     * Save in transient post url.
+     * Save the current post URL in a transient for later processing.
+     * 
+     * This method saves the current post URL in a transient for the current user.
+     * It is used to store URLs that need to be processed by Siteimprove when the user visits the admin area.
+     * 
+     * @param int $post_ID The ID of the post being saved.
+     * 
+     * @return void
      */
     public function saveSessionUrlPost($post_ID)
     {
@@ -168,28 +231,40 @@ class Integration
     }
 
     /**
-     * Save in transient term url.
-     * @param int $term_id
-     * @param int $tt_id
-     * @param string $taxonomy
+     * Save the current term URL in a transient for later processing.
+     * 
+     * This method saves the current term URL in a transient for the current user.
+     * It is used to store URLs that need to be processed by Siteimprove when the user visits the admin area.
+     * 
+     * @param int $termId The ID of the term being saved.
+     * @param int $tTId The term taxonomy ID.
+     * @param string $taxonomy The taxonomy of the term.
+     * 
+     * @return void
      */
-    public function saveSessionUrlTerm($term_id, $tt_id, $taxonomy)
+    public function saveSessionUrlTerm($termId, $tTId, $taxonomy)
     {
         $urls = get_transient(self::TRANSIENT_URL . get_current_user_id());
-        $urls[] = get_term_link($term_id, $taxonomy);
+        $urls[] = get_term_link($termId, $taxonomy);
         set_transient(self::TRANSIENT_URL . get_current_user_id(), $urls, 900);
     }
 
     /**
-     * Save in transient product url (WooCommerce).
-     * @param string $new_status
-     * @param string $old_status
-     * @param object $post
+     * Save the current product URL in a transient for later processing.
+     * 
+     * This method saves the current product URL in a transient for the current user.
+     * It is used to store URLs that need to be processed by Siteimprove when the user visits the admin area.
+     * 
+     * @param string $newStatus The new status of the post (e.g., 'publish').
+     * @param string $oldStatus The old status of the post.
+     * @param object $post The post object being saved.
+     * 
+     * @return void
      */
-    public function saveSessionUrlProduct($new_status, $old_status, $post)
+    public function saveSessionUrlProduct($newStatus, $oldStatus, $post)
     {
         if (
-            $new_status == 'publish'
+            $newStatus == 'publish'
             && !empty($post->ID)
             && in_array($post->post_type, ['product'])
         ) {
@@ -200,7 +275,11 @@ class Integration
     }
 
     /**
-     * Include js in frontend pages.
+     * Add JavaScript to the head section.
+     * 
+     * This method checks the current user's role and adds the appropriate JavaScript for Siteimprove integration.
+     * It determines the current page type and sets the URL and method for Siteimprove actions.
+     * 
      * @return void
      */
     public function wpHead()
@@ -227,8 +306,12 @@ class Integration
     }
 
     /**
-     * Return current page type.
-     * @return string
+     * Get the current page type.
+     * 
+     * This method determines the type of the current page based on the global `$wp_query` object.
+     * It returns a string representing the page type, such as 'home', 'page', 'single', 'category', etc.
+     * 
+     * @return string The type of the current page.
      */
     protected function getCurrentPageType()
     {

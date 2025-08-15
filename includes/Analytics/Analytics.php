@@ -4,16 +4,25 @@ namespace RRZE\Siteimprove\Analytics;
 
 defined('ABSPATH') || exit;
 
+use RRZE\Siteimprove\Options;
 use function RRZE\Siteimprove\plugin;
-use function RRZE\Siteimprove\settings;
 
+/**
+ * Analytics class for the Siteimprove plugin.
+ * 
+ * This class handles the analytics functionality of the Siteimprove plugin.
+ * It includes methods to enqueue scripts, handle shortcodes, and manage privacy policy content.
+ * 
+ * @package RRZE\Siteimprove\Analytics
+ * @since 1.0.0
+ */
 class Analytics
 {
     protected $options;
 
     public function __construct()
     {
-        $this->options = settings()->getOptions();
+        $this->options = Options::getOptions();
 
         add_action('wp_enqueue_scripts', [$this, 'wpEnqueueScripts']);
         add_shortcode('siteimprove_analytics_privacy_policy', [$this, 'shortcode']);
@@ -32,7 +41,7 @@ class Analytics
                 'rrze-siteimprove-analytics',
                 plugins_url('build/analytics.js', plugin()->getBasename()),
                 $assetFile['dependencies'] ?? [],
-                plugin()->getVersion()
+                $assetFile['version'] ?? plugin()->getVersion(),
             );
             wp_localize_script(
                 'rrze-siteimprove-analytics',
@@ -69,8 +78,8 @@ class Analytics
     protected function getLocale()
     {
         $locale = get_locale();
-        $locale_default = 'en_US';
-        $locale_dictionary = [
+        $localeDefault = 'en_US';
+        $localeDictionary = [
             'de_DE' => 'de_DE',
             'de_DE_formal' => 'de_DE',
             'de_CH' => 'de_DE',
@@ -82,11 +91,11 @@ class Analytics
             'en_GB' => 'en_US'
         ];
 
-        if (isset($locale_dictionary[$locale])) {
-            return $locale_dictionary[$locale];
+        if (isset($localeDictionary[$locale])) {
+            return $localeDictionary[$locale];
         }
 
-        return $locale_default;
+        return $localeDefault;
     }
 
     protected function getFileContent($file = '')
