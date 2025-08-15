@@ -371,7 +371,7 @@ class Settings
         $helpSidebar = sprintf(
             '<p><strong>%1$s:</strong>
             </p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p>
-            <p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>
+            <p><a href="https://github.com/RRZE-Webteam/rrze-siteimprove">%2$s</a></p>
             <p><a href="https://siteimprove.com" target="_blank">%3$s</a></p>',
             __('For more information', 'rrze-siteimprove'),
             __('RRZE Webteam on Github', 'rrze-siteimprove'),
