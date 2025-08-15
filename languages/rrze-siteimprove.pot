@@ -1,125 +1,165 @@
-# Copyright (C) 2022 RRZE-Webteam
-# This file is distributed under the GNU General Public License v2.
+# Copyright (C) 2025 RRZE Webteam
+# This file is distributed under the GNU General Public License Version 3.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Siteimprove 1.6.0\n"
+"Project-Id-Version: RRZE Siteimprove 1.6.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-siteimprove\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-03-05T20:53:08+00:00\n"
+"POT-Creation-Date: 2025-08-15T08:28:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: rrze-siteimprove\n"
 
 #. Plugin Name of the plugin
+#: rrze-siteimprove.php
 msgid "RRZE Siteimprove"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: rrze-siteimprove.php
 msgid "https://github.com/RRZE-Webteam/rrze-siteimprove"
 msgstr ""
 
 #. Description of the plugin
-msgid "Integration with Siteimprove."
+#: rrze-siteimprove.php
+msgid "Siteimprove integration."
 msgstr ""
 
 #. Author of the plugin
-msgid "RRZE-Webteam"
+#: rrze-siteimprove.php
+msgid "RRZE Webteam"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "https://www.rrze.fau.de"
+#: rrze-siteimprove.php
+msgid "https://www.wp.rrze.fau.de/"
 msgstr ""
 
-#: includes/Integration.php:143
+#: includes/Integration.php:200
 msgid "Siteimprove Recheck"
 msgstr ""
 
-#: includes/Settings.php:34
-#: includes/Settings.php:47
+#: includes/Settings.php:84
+#: includes/Settings.php:85
+#: includes/Settings.php:107
 msgid "Siteimprove"
 msgstr ""
 
-#: includes/Settings.php:72
+#: includes/Settings.php:138
+#: includes/Settings.php:355
 msgid "Integration"
 msgstr ""
 
-#: includes/Settings.php:78
-#: includes/Settings.php:105
+#: includes/Settings.php:146
+#: includes/Settings.php:181
 msgid "Enable"
 msgstr ""
 
-#: includes/Settings.php:85
+#: includes/Settings.php:155
 msgid "Token"
 msgstr ""
 
-#: includes/Settings.php:92
+#: includes/Settings.php:164
 msgid "Badge Role"
 msgstr ""
 
-#: includes/Settings.php:99
+#: includes/Settings.php:173
+#: includes/Settings.php:356
 msgid "Analytics"
 msgstr ""
 
-#: includes/Settings.php:112
+#: includes/Settings.php:190
 msgid "Code"
 msgstr ""
 
-#: includes/Settings.php:148
+#: includes/Settings.php:238
 msgid "You can scan your website for errors as soon as a page is published, allowing you to fix mistakes, optimize content, and manage your site more efficiently."
 msgstr ""
 
-#: includes/Settings.php:153
+#: includes/Settings.php:251
 msgid "Get insight into visitor behavior and optimize your website with powerful analytics that anyone can use."
 msgstr ""
 
-#: includes/Settings.php:154
+#: includes/Settings.php:252
 msgid "Use the shortcode [siteimprove_analytics_privacy_policy] to display the corresponding privacy policy with an opt-out button."
 msgstr ""
 
-#: includes/Settings.php:177
+#: includes/Settings.php:283
 msgid "Request new token"
 msgstr ""
 
-#: includes/Settings.php:191
+#: includes/Settings.php:301
 msgid "User role required to display the Siteimprove Badge."
 msgstr ""
 
-#: includes/Settings.php:215
+#: includes/Settings.php:333
 msgid "The code that is specific to your account."
 msgstr ""
 
-#: includes/Settings.php:226
-msgid "Here comes the Context Help content."
-msgstr ""
-
-#: includes/Settings.php:232
+#: includes/Settings.php:348
 msgid "Overview"
 msgstr ""
 
-#: includes/Settings.php:236
+#: includes/Settings.php:350
+msgid "Siteimprove Help"
+msgstr ""
+
+#: includes/Settings.php:351
+msgid "The Siteimprove plugin integrates your WordPress site with your Siteimprove account. It lets you scan content for errors, monitor quality and accessibility, and optionally enable Siteimprove Analytics."
+msgstr ""
+
+#: includes/Settings.php:353
+msgid "Screen Content"
+msgstr ""
+
+#: includes/Settings.php:355
+msgid "Enable Siteimprove, enter your token, and choose which user role can see the Siteimprove badge."
+msgstr ""
+
+#: includes/Settings.php:356
+msgid "Enable Analytics, add your Siteimprove code, and use the shortcode [siteimprove_analytics_privacy_policy] to display a privacy policy with an opt-out option."
+msgstr ""
+
+#: includes/Settings.php:359
+msgid "Available Actions"
+msgstr ""
+
+#: includes/Settings.php:361
+msgid "Enable or disable the Siteimprove integration."
+msgstr ""
+
+#: includes/Settings.php:362
+msgid "Request a new token if needed."
+msgstr ""
+
+#: includes/Settings.php:363
+msgid "Choose the minimum role for the badge."
+msgstr ""
+
+#: includes/Settings.php:364
+msgid "Enable or disable Analytics."
+msgstr ""
+
+#: includes/Settings.php:365
+msgid "Add your Analytics code."
+msgstr ""
+
+#: includes/Settings.php:366
+msgid "Save your changes."
+msgstr ""
+
+#: includes/Settings.php:376
 msgid "For more information"
 msgstr ""
 
-#: includes/Settings.php:236
+#: includes/Settings.php:377
 msgid "RRZE Webteam on Github"
 msgstr ""
 
-#. translators: 1: Server PHP version number, 2: Required PHP version number.
-#: rrze-siteimprove.php:69
-msgid "The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s."
-msgstr ""
-
-#. translators: 1: Server WordPress version number, 2: Required WordPress version number.
-#: rrze-siteimprove.php:76
-msgid "The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s."
-msgstr ""
-
-#. translators: 1: The plugin name, 2: The error string.
-#: rrze-siteimprove.php:95
-#: rrze-siteimprove.php:157
-msgid "Plugins: %1$s: %2$s"
+#: includes/Settings.php:378
+msgid "Visit Siteimprove"
 msgstr ""
