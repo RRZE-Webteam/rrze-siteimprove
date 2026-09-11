@@ -1,13 +1,58 @@
 {
-    "private": true,
-    "devDependencies": {
-        "@wordpress/scripts": "^30.21.0"
-    },
-    "scripts": {
-        "start": "wp-scripts start",
-        "build": "wp-scripts build"
-    },
-    "browserslist": [
-        "extends @wordpress/browserslist-config"
-    ]
+  "name": "rrze-siteimprove",
+  "title": "RRZE Siteimprove",
+  "version": "1.7.1",
+  "description": "Integration of Siteimprove AI Analytics script in websites",
+  "main": "rrze-siteimprove.php",
+  "textdomain": "rrze-siteimprove",
+  "domainPath": "/languages",
+  "source": {
+    "js": "./src/js/"
+  },
+  "target": {
+    "js": "./build/"
+  },
+  "private": true,
+  "compatibility": {
+    "wprequires": "6.8",
+    "wptestedup": "7.1",
+    "phprequires": "8.2"
+  },
+  "supports": {
+    "email": "webmaster@fau.de"
+  },
+  "author": {
+    "name": "RRZE Webteam",
+    "url": "https://www.wp.rrze.fau.de/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RRZE-Webteam/rrze-siteimprove",
+    "issues": "https://github.com/RRZE-Webteam/rrze-siteimprove/issues"
+  },
+  "license": "GNU General Public License Version 3",
+  "licenseurl": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "tags": "Plugin, WordPress, Multisite, RRZE, Siteimprove, Analytics",
+  "engines": {
+    "node": ">=22.10.0",
+    "npm": ">=10.9.0"
+  },
+  "devDependencies": {
+    "terser": "^5.51.2"
+  },
+  "scripts": {
+    "readme": "node scripts/build-readme.js",
+    "version:dev": "node scripts/build-version.js dev",
+    "version:prod": "node scripts/build-version.js prod",
+    "version:release": "node scripts/build-version.js release",
+    "build:assets": "node scripts/build-assets.js dev",
+    "build:assets:dev": "node scripts/build-assets.js dev",
+    "build:assets:prod": "node scripts/build-assets.js prod",
+    "watch:assets": "node scripts/build-assets.js dev --watch",
+    "start": "npm run watch:assets",
+    "dev": "npm run build:assets:dev && npm run version:dev && npm run readme",
+    "build": "npm run build:assets:prod && npm run version:prod && npm run readme",
+    "prod": "npm run build",
+    "release": "npm run build:assets:prod && npm run version:release && npm run readme"
+  }
 }

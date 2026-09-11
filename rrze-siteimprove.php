@@ -3,8 +3,8 @@
 /*
 Plugin Name:        RRZE Siteimprove
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-siteimprove
-Version:            1.6.5
-Description:        Siteimprove integration.
+Version:            1.7.1
+Description:        Integration of Siteimprove AI Analytics script in websites
 Author:             RRZE Webteam
 Author URI:         https://www.wp.rrze.fau.de/
 License:            GNU General Public License Version 3
@@ -106,7 +106,7 @@ function plugin()
 function load_textdomain()
 {
     load_plugin_textdomain(
-        'rrze-jobspreader-analytics',
+        'rrze-siteimprove',
         false,
         dirname(plugin_basename(__FILE__)) . '/languages'
     );
@@ -129,7 +129,7 @@ function systemRequirements(): string
     if (!is_wp_version_compatible(plugin()->getRequiresWP())) {
         $error = sprintf(
             /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
-            __('The server is running WordPress version %1$s. The plugin requires at least WordPress version %2$s.', 'rrze-jobspreader-analytics'),
+            __('The server is running WordPress version %1$s. The plugin requires at least WordPress version %2$s.', 'rrze-siteimprove'),
             wp_get_wp_version(),
             plugin()->getRequiresWP()
         );
@@ -137,7 +137,7 @@ function systemRequirements(): string
         // Check if the PHP version is compatible with the plugin's requirement.
         $error = sprintf(
             /* translators: 1: Server PHP version number, 2: Required PHP version number. */
-            __('The server is running PHP version %1$s. The plugin requires at least PHP version %2$s.', 'rrze-jobspreader-analytics'),
+            __('The server is running PHP version %1$s. The plugin requires at least PHP version %2$s.', 'rrze-siteimprove'),
             phpversion(),
             plugin()->getRequiresPHP()
         );
@@ -181,10 +181,10 @@ function loaded()
                     printf(
                         '<div class="notice notice-error"><p>' .
                             /* translators: 1: The plugin name, 2: The error string. */
-                            esc_html__('Plugins: %1$s: %2$s', 'rrze-jobspreader-analytics') .
+                            esc_html__('Plugins: %1$s: %2$s', 'rrze-siteimprove') .
                             '</p></div>',
-                        $pluginName,
-                        $error
+                        esc_html($pluginName),
+                        esc_html($error)
                     );
                 });
             }

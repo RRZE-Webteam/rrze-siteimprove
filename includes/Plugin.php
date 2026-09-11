@@ -208,7 +208,7 @@ class Plugin
      */
     public function getVersion(): string
     {
-        return $this->data['Version'];
+        return Config::get('version', $this->data['Version'] ?? '');
     }
 
     /**
@@ -218,7 +218,7 @@ class Plugin
      */
     public function getRequiresWP(): string
     {
-        return $this->data['RequiresWP'];
+        return Config::get('wprequires', $this->data['RequiresWP'] ?? '');
     }
 
     /**
@@ -228,7 +228,7 @@ class Plugin
      */
     public function getRequiresPHP(): string
     {
-        return $this->data['RequiresPHP'];
+        return Config::get('phprequires', $this->data['RequiresPHP'] ?? '');
     }
 
     /**
@@ -245,6 +245,8 @@ class Plugin
         if (!method_exists($this, $name)) {
             $message = sprintf('Call to undefined method %1$s::%2$s', __CLASS__, $name);
             if (defined('WP_DEBUG') && WP_DEBUG) {
+                // Exception messages are not rendered as HTML output.
+                // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- The message is passed to an exception, not printed.
                 throw new \Exception($message);
             }
         }

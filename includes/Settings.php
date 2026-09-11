@@ -42,7 +42,7 @@ class Settings
      * 
      * @var string
      */
-    protected $menuSlug = 'rrze-siteimprove';
+    protected $menuSlug;
 
     /**
      * Constructor
@@ -53,10 +53,10 @@ class Settings
     {
         $this->optionName = Options::getOptionName();
         $this->options = Options::getOptions();
+        $this->menuSlug = Config::get('menu_slug', 'rrze-siteimprove');
 
         add_action('admin_menu', [$this, 'settingsMenu']);
         add_action('admin_init', [$this, 'settings']);
-        add_action('wp_ajax_siteimproveRequestToken', [$this, 'siteimproveRequestToken']);
     }
 
     /**
@@ -76,16 +76,16 @@ class Settings
      */
     public function settingsMenu()
     {
-        // In general, the required capability is "manage_options" however, for RRZE CMS purposes "manage_network_options" is used.
-        $capability = is_multisite() ? 'manage_network_options' : 'manage_options';
+        $capability = $this->getSettingsCapability();
 
-        // Add sub menu page to the Tools main menu
-        $this->settingsMenu = add_management_page(
-            __('Siteimprove', 'rrze-siteimprove'),
-            __('Siteimprove', 'rrze-siteimprove'),
+        $this->settingsMenu = add_submenu_page(
+            Config::get('settings_parent_slug', 'options-general.php'),
+            __('RRZE Siteimprove', 'rrze-siteimprove'),
+            __('RRZE Siteimprove', 'rrze-siteimprove'),
             $capability,
-            'rrze-siteimprove',
-            [$this, 'settingsPage']
+            $this->menuSlug,
+            [$this, 'settingsPage'],
+            Config::get('settings_menu_position', 90)
         );
 
         // Add Contextual Help Menu
@@ -103,12 +103,12 @@ class Settings
     public function settingsPage()
     {
 ?>
-        <div class="wrap">
-            <h2><?php echo __('Siteimprove', 'rrze-siteimprove'); ?></h2>
+        <div class="wrap rrze-siteimprove rrze-siteimprove-admin">
+            <h2><?php esc_html_e('Siteimprove', 'rrze-siteimprove'); ?></h2>
             <form method="post" action="options.php">
                 <?php
-                settings_fields('rrze_siteimprove_options');
-                do_settings_sections('rrze_siteimprove_options');
+                settings_fields(Config::get('settings_group', 'rrze_siteimprove_options'));
+                do_settings_sections(Config::get('settings_page', 'rrze_siteimprove_options'));
                 submit_button(); ?>
             </form>
         </div>
@@ -127,52 +127,25 @@ class Settings
     {
         // Register the settings for the Siteimprove options.
         register_setting(
-            'rrze_siteimprove_options',
+            Config::get('settings_group', 'rrze_siteimprove_options'),
             $this->optionName,
             [$this, 'optionsValidate']
         );
 
-        // Add Integration section
+        // Add Siteimprove Overlay notice section.
         add_settings_section(
-            'rrze_siteimprove_integrationSection',
-            __('Integration', 'rrze-siteimprove'),
-            [$this, 'integrationSection'],
-            'rrze_siteimprove_options'
+            'rrze_siteimprove_overlay_section',
+            __('Siteimprove Overlay', 'rrze-siteimprove'),
+            [$this, 'overlaySection'],
+            Config::get('settings_page', 'rrze_siteimprove_options')
         );
 
-        // Add Integration Enable Field
-        add_settings_field(
-            'rrze_siteimprove_integration_enable',
-            __('Enable', 'rrze-siteimprove'),
-            [$this, 'integrationEnableField'],
-            'rrze_siteimprove_options',
-            'rrze_siteimprove_integrationSection'
-        );
-
-        // Add Integration Token Field
-        add_settings_field(
-            'rrze_siteimprove_integration_token',
-            __('Token', 'rrze-siteimprove'),
-            [$this, 'integrationTokenField'],
-            'rrze_siteimprove_options',
-            'rrze_siteimprove_integrationSection'
-        );
-
-        // Add Badge Role Field
-        add_settings_field(
-            'rrze_siteimprove_integration_badge_role',
-            __('Badge Role', 'rrze-siteimprove'),
-            [$this, 'integrationBadgeRoleField'],
-            'rrze_siteimprove_options',
-            'rrze_siteimprove_integrationSection'
-        );
-
-        // Add Analytics section
+        // Add Analytics section.
         add_settings_section(
             'rrze_siteimprove_analytics_section',
             __('Analytics', 'rrze-siteimprove'),
             [$this, 'analyticsSection'],
-            'rrze_siteimprove_options'
+            Config::get('settings_page', 'rrze_siteimprove_options')
         );
 
         // Analytics Enable Field
@@ -180,7 +153,7 @@ class Settings
             'rrze_siteimprove_analytics_enable',
             __('Enable', 'rrze-siteimprove'),
             [$this, 'analyticsEnableField'],
-            'rrze_siteimprove_options',
+            Config::get('settings_page', 'rrze_siteimprove_options'),
             'rrze_siteimprove_analytics_section'
         );
 
@@ -189,7 +162,7 @@ class Settings
             'rrze_siteimprove_analytics_code',
             __('Code', 'rrze-siteimprove'),
             [$this, 'analyticsCodeField'],
-            'rrze_siteimprove_options',
+            Config::get('settings_page', 'rrze_siteimprove_options'),
             'rrze_siteimprove_analytics_section'
         );
     }
@@ -198,44 +171,38 @@ class Settings
      * Validate and sanitize the options input.
      * 
      * This method processes the input from the settings form, ensuring that the values are valid and sanitized.
-     * It handles enabling/disabling features, setting tokens, and validating user roles.
+     * It handles enabling/disabling Siteimprove Analytics and validating the analytics code.
      * 
      * @param array $input
      * @return array
      */
     public function optionsValidate($input)
     {
-        $input['integration_enable'] = !empty($input['integration_enable']) ? 1 : 0;
-
-        $input['integration_token'] = !empty($input['integration_token']) ? $input['integration_token'] : '';
-        if (!$input['integration_token'] || !$this->options->integration_token) {
-            $token = Auth::requestToken();
-            if ($token !== false) {
-                $input['integration_token'] = $token;
-            }
-        }
-
-        $roles = array_reverse(get_editable_roles());
-        $input['integration_badge_role'] = isset($roles[$input['integration_badge_role']]) ? $input['integration_badge_role'] : 'administrator';
+        $input = is_array($input) ? $input : [];
 
         $input['analytics_enable'] = !empty($input['analytics_enable']) ? 1 : 0;
 
-        $input['analytics_code'] = !empty($input['analytics_code']) ? $input['analytics_code'] : '';
+        if (Options::getServerAnalyticsCode() !== '') {
+            $input['analytics_code'] = '';
+        } else {
+            $input['analytics_code'] = !empty($input['analytics_code'])
+                ? Options::sanitizeAnalyticsCode($input['analytics_code'])
+                : '';
+        }
 
         return $input;
     }
 
     /**
-     * Integration section description.
+     * Siteimprove Overlay section description.
      * 
-     * This method outputs a description for the integration section on the settings page.
-     * It explains the purpose of the Siteimprove integration and how it can help manage website content.
+     * This method outputs a notice that the former overlay integration is no longer handled by this plugin.
      * 
      * @return void
      */
-    public function integrationSection()
+    public function overlaySection()
     {
-        echo '<p>', __('You can scan your website for errors as soon as a page is published, allowing you to fix mistakes, optimize content, and manage your site more efficiently.', 'rrze-siteimprove'), '</p>';
+        echo '<p>', esc_html__('The former Siteimprove Overlay integration, including token retrieval, recheck and recrawl functions, has been replaced by the official Siteimprove WordPress plugin. RRZE Siteimprove now only embeds the Siteimprove Analytics JavaScript.', 'rrze-siteimprove'), '</p>';
     }
 
     /**
@@ -248,58 +215,8 @@ class Settings
      */
     public function analyticsSection()
     {
-        echo '<p>', __('Get insight into visitor behavior and optimize your website with powerful analytics that anyone can use.', 'rrze-siteimprove'), '</p>';
-        echo '<p>', __('Use the shortcode [siteimprove_analytics_privacy_policy] to display the corresponding privacy policy with an opt-out button.', 'rrze-siteimprove'), '</p>';
-    }
-
-    /**
-     * Integration Enable Field
-     * 
-     * This method outputs the checkbox for enabling the Siteimprove integration.
-     * It allows users to enable or disable the integration with Siteimprove.
-     * 
-     * @return void
-     */
-    public function integrationEnableField()
-    {
-        $checked = $this->options->integration_enable ? true : false;
-    ?>
-        <input id="siteimprove-integration-enable" type="checkbox" <?php checked($checked); ?> name="<?php printf('%s[integration_enable]', $this->optionName); ?>" value="1" />
-    <?php
-    }
-
-    /**
-     * Integration Token Field
-     * 
-     * This method outputs the input field for the Siteimprove integration token.
-     * It allows users to enter their specific integration token for Siteimprove.
-     * 
-     * @return void
-     */
-    public function integrationTokenField()
-    {
-    ?>
-        <input type="text" id="siteimprove-integration-token" name="<?php printf('%s[integration_token]', $this->optionName); ?>" value="<?php echo $this->options->integration_token; ?>" maxlength="50" size="50" />
-        <input class="button" id="siteimprove-integration-token-request" type="button" value="<?php _e('Request new token', 'rrze-siteimprove'); ?>" />
-    <?php
-    }
-
-    /**
-     * Integration Badge Role Field
-     * 
-     * This method outputs a dropdown for selecting the user role that can see the Siteimprove badge.
-     * It allows administrators to control which users can access the Siteimprove features.
-     * 
-     * @return void
-     */
-    public function integrationBadgeRoleField()
-    {
-    ?>
-        <select name="<?php printf('%s[integration_badge_role]', $this->optionName); ?>">
-            <?php wp_dropdown_roles($this->options->integration_badge_role); ?>
-        </select>
-        <p class="description"><?php _e('User role required to display the Siteimprove Badge.', 'rrze-siteimprove'); ?></p>
-    <?php
+        echo '<p>', esc_html__('Get insight into visitor behavior and optimize your website with powerful analytics that anyone can use.', 'rrze-siteimprove'), '</p>';
+        echo '<p>', esc_html__('Use the shortcode [siteimprove_analytics_privacy_policy] to display the corresponding privacy policy with an opt-out button.', 'rrze-siteimprove'), '</p>';
     }
 
     /**
@@ -314,7 +231,8 @@ class Settings
     {
         $checked = $this->options->analytics_enable ? true : false;
     ?>
-        <input id="siteimprove-analytics-enable" type="checkbox" <?php checked($checked); ?> name="<?php printf('%s[analytics_enable]', $this->optionName); ?>" value="1" />
+        <input id="siteimprove-analytics-enable" type="checkbox" <?php checked($checked); ?> name="<?php printf('%s[analytics_enable]', esc_attr($this->optionName)); ?>" value="1" />
+        <p class="description"><?php esc_html_e('This integrates the Siteimprove AI Analytics script into the website. Note: This activates the display of a consent banner.', 'rrze-siteimprove'); ?></p>
     <?php
     }
 
@@ -328,9 +246,16 @@ class Settings
      */
     public function analyticsCodeField()
     {
+        if (Options::getServerAnalyticsCode() !== '') {
+?>
+        <p class="description"><?php esc_html_e('The Siteimprove Analytics code is already configured server-side and is therefore not displayed here.', 'rrze-siteimprove'); ?></p>
+<?php
+            return;
+        }
+
     ?>
-        <input type="text" id="siteimprove-analytics-code" name="<?php printf('%s[analytics_code]', $this->optionName); ?>" value="<?php echo $this->options->analytics_code; ?>" />
-        <p class="description"><?php _e('The code that is specific to your account.', 'rrze-siteimprove'); ?></p>
+        <input type="text" id="siteimprove-analytics-code" name="<?php printf('%s[analytics_code]', esc_attr($this->optionName)); ?>" value="<?php echo esc_attr($this->options->analytics_code); ?>" />
+        <p class="description"><?php esc_html_e('The code that is specific to your account.', 'rrze-siteimprove'); ?></p>
 <?php
     }
 
@@ -347,35 +272,35 @@ class Settings
             'id' => $this->settingsMenu,
             'title' => __('Overview', 'rrze-siteimprove'),
             'content' => '
-            <h2>' . __('Siteimprove Help', 'rrze-siteimprove') . '</h2>
-            <p>' . __('The Siteimprove plugin integrates your WordPress site with your Siteimprove account. It lets you scan content for errors, monitor quality and accessibility, and optionally enable Siteimprove Analytics.', 'rrze-siteimprove') . '</p>
+            <h2>' . esc_html__('Siteimprove Help', 'rrze-siteimprove') . '</h2>
+            <p>' . esc_html__('RRZE Siteimprove embeds the Siteimprove Analytics JavaScript on your WordPress site.', 'rrze-siteimprove') . '</p>
 
-            <h2>' . __('Screen Content', 'rrze-siteimprove') . '</h2>
+            <h2>' . esc_html__('Screen Content', 'rrze-siteimprove') . '</h2>
             <ul>
-                <li><strong>' . __('Integration', 'rrze-siteimprove') . '</strong>: ' . __('Enable Siteimprove, enter your token, and choose which user role can see the Siteimprove badge.', 'rrze-siteimprove') . '</li>
-                <li><strong>' . __('Analytics', 'rrze-siteimprove') . '</strong>: ' . __('Enable Analytics, add your Siteimprove code, and use the shortcode [siteimprove_analytics_privacy_policy] to display a privacy policy with an opt-out option.', 'rrze-siteimprove') . '</li>
+                <li><strong>' . esc_html__('Siteimprove Overlay', 'rrze-siteimprove') . '</strong>: ' . esc_html__('The former overlay functionality is handled by the official Siteimprove WordPress plugin.', 'rrze-siteimprove') . '</li>
+                <li><strong>' . esc_html__('Analytics', 'rrze-siteimprove') . '</strong>: ' . esc_html__('Enable Analytics, add your Siteimprove code, and use the shortcode [siteimprove_analytics_privacy_policy] to display a privacy policy with an opt-out option.', 'rrze-siteimprove') . '</li>
             </ul>
 
-            <h2>' . __('Available Actions', 'rrze-siteimprove') . '</h2>
+            <h2>' . esc_html__('Available Actions', 'rrze-siteimprove') . '</h2>
             <ul>
-                <li>' . __('Enable or disable the Siteimprove integration.', 'rrze-siteimprove') . '</li>
-                <li>' . __('Request a new token if needed.', 'rrze-siteimprove') . '</li>
-                <li>' . __('Choose the minimum role for the badge.', 'rrze-siteimprove') . '</li>
-                <li>' . __('Enable or disable Analytics.', 'rrze-siteimprove') . '</li>
-                <li>' . __('Add your Analytics code.', 'rrze-siteimprove') . '</li>
-                <li>' . __('Save your changes.', 'rrze-siteimprove') . '</li>
+                <li>' . esc_html__('Enable or disable Analytics.', 'rrze-siteimprove') . '</li>
+                <li>' . esc_html__('Add your Analytics code.', 'rrze-siteimprove') . '</li>
+                <li>' . esc_html__('Save your changes.', 'rrze-siteimprove') . '</li>
             </ul>
         ',
         ];
 
         $helpSidebar = sprintf(
             '<p><strong>%1$s:</strong>
-            </p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p>
-            <p><a href="https://github.com/RRZE-Webteam/rrze-siteimprove">%2$s</a></p>
-            <p><a href="https://siteimprove.com" target="_blank">%3$s</a></p>',
-            __('For more information', 'rrze-siteimprove'),
-            __('RRZE Webteam on Github', 'rrze-siteimprove'),
-            __('Visit Siteimprove', 'rrze-siteimprove')
+            </p><p><a href="%2$s">RRZE-Webworking</a></p>
+            <p><a href="%3$s">%4$s</a></p>
+            <p><a href="%5$s" target="_blank" rel="noopener noreferrer">%6$s</a></p>',
+            esc_html__('For more information', 'rrze-siteimprove'),
+            esc_url('http://blogs.fau.de/webworking'),
+            esc_url('https://github.com/RRZE-Webteam/rrze-siteimprove'),
+            esc_html__('RRZE Webteam on Github', 'rrze-siteimprove'),
+            esc_url('https://siteimprove.com'),
+            esc_html__('Visit Siteimprove', 'rrze-siteimprove')
         );
 
         $screen = get_current_screen();
@@ -389,21 +314,9 @@ class Settings
         $screen->set_help_sidebar($helpSidebar);
     }
 
-    /**
-     * Request a new Siteimprove token via AJAX.
-     * 
-     * This method checks if the user has the required capability to manage options,
-     * and if so, it calls the Auth::requestToken() method to get a new token.
-     * 
-     * @return void
-     */
-    public function siteimproveRequestToken()
+    private function getSettingsCapability(): string
     {
-        // Check access.
-        if (!current_user_can('manage_options')) {
-            return;
-        }
-        echo Auth::requestToken();
-        wp_die();
+        return is_multisite() ? 'manage_network_options' : 'manage_options';
     }
+
 }
