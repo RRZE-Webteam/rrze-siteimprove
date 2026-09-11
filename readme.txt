@@ -1,5 +1,5 @@
 === Plugin Name: RRZE Siteimprove ===
-Version: 1.7.0
+Version: 1.7.1
 Plugin URI: https://github.com/RRZE-Webteam/rrze-siteimprove
 GitHub Issue URL: https://github.com/RRZE-Webteam/rrze-siteimprove/issues
 Author: RRZE Webteam

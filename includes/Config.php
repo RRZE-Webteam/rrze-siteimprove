@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 class Config
 {
     private static array $config = [
-        'version' => '1.7.0',
+        'version' => '1.7.1',
         'wprequires' => '6.8',
         'wptestedup' => '7.1',
         'phprequires' => '8.2',

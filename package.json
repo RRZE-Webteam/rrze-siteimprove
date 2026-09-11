@@ -1,7 +1,7 @@
 {
   "name": "rrze-siteimprove",
   "title": "RRZE Siteimprove",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Integration of Siteimprove AI Analytics script in websites",
   "main": "rrze-siteimprove.php",
   "textdomain": "rrze-siteimprove",

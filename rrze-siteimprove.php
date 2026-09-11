@@ -3,7 +3,7 @@
 /*
 Plugin Name:        RRZE Siteimprove
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-siteimprove
-Version:            1.7.0
+Version:            1.7.1
 Description:        Integration of Siteimprove AI Analytics script in websites
 Author:             RRZE Webteam
 Author URI:         https://www.wp.rrze.fau.de/
@@ -183,8 +183,8 @@ function loaded()
                             /* translators: 1: The plugin name, 2: The error string. */
                             esc_html__('Plugins: %1$s: %2$s', 'rrze-siteimprove') .
                             '</p></div>',
-                        $pluginName,
-                        $error
+                        esc_html($pluginName),
+                        esc_html($error)
                     );
                 });
             }

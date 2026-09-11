@@ -67,8 +67,10 @@ class Main
      */
     public function headMeta()
     {
-        if (is_singular() && $post = get_queried_object()) {
-            printf('<meta name="pageID" content="%d">%s', absint($post->ID), PHP_EOL);
+        $postId = get_queried_object_id();
+
+        if (is_singular() && $postId) {
+            printf('<meta name="pageID" content="%d">%s', absint($postId), PHP_EOL);
         }
     }
 }

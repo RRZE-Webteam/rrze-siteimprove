@@ -245,6 +245,8 @@ class Plugin
         if (!method_exists($this, $name)) {
             $message = sprintf('Call to undefined method %1$s::%2$s', __CLASS__, $name);
             if (defined('WP_DEBUG') && WP_DEBUG) {
+                // Exception messages are not rendered as HTML output.
+                // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- The message is passed to an exception, not printed.
                 throw new \Exception($message);
             }
         }
