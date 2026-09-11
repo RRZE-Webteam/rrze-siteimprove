@@ -4,6 +4,7 @@ namespace RRZE\Siteimprove\Analytics;
 
 defined('ABSPATH') || exit;
 
+use RRZE\Siteimprove\Config;
 use RRZE\Siteimprove\Options;
 use function RRZE\Siteimprove\plugin;
 
@@ -25,29 +26,32 @@ class Analytics
         $this->options = Options::getOptions();
 
         add_action('wp_enqueue_scripts', [$this, 'wpEnqueueScripts']);
-        add_shortcode('siteimprove_analytics_privacy_policy', [$this, 'shortcode']);
+        add_shortcode(Config::get('privacy_policy_shortcode', 'siteimprove_analytics_privacy_policy'), [$this, 'shortcode']);
     }
 
     protected function isAnalyticEnabled()
     {
-        return apply_filters('siteimprove_analytics_enabled', $this->options->analytics_enable);
+        return apply_filters(Config::get('analytics_enabled_filter', 'siteimprove_analytics_enabled'), $this->options->analytics_enable);
     }
 
     public function wpEnqueueScripts()
     {
-        if ($this->isAnalyticEnabled()) {
-            $assetFile = include(plugin()->getPath('build') . 'analytics.asset.php');
+        $analyticsCode = Options::getAnalyticsCode();
+
+        if ($this->isAnalyticEnabled() && $analyticsCode !== '') {
+            $assetFile = include(plugin()->getPath('build') . 'rrze-siteimprove.asset.php');
             wp_enqueue_script(
-                'rrze-siteimprove-analytics',
-                plugins_url('build/analytics.js', plugin()->getBasename()),
+                Config::get('analytics_asset_handle', 'rrze-siteimprove'),
+                plugins_url('build/rrze-siteimprove.js', plugin()->getBasename()),
                 $assetFile['dependencies'] ?? [],
                 $assetFile['version'] ?? plugin()->getVersion(),
             );
             wp_localize_script(
-                'rrze-siteimprove-analytics',
-                'siteanalyze',
+                Config::get('analytics_asset_handle', 'rrze-siteimprove'),
+                Config::get('analytics_script_object', 'siteanalyze'),
                 [
-                    'code' => $this->options->analytics_code
+                    'baseUrl' => Config::get('siteimprove_analytics_base_url'),
+                    'code' => $analyticsCode
                 ]
             );
         }

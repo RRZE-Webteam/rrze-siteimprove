@@ -15,8 +15,6 @@ defined('ABSPATH') || exit;
  */
 class Options
 {
-    protected static $optionName = 'rrze_siteimprove';
-
     /**
      * Default options for the Siteimprove plugin.
      * 
@@ -27,13 +25,7 @@ class Options
      */
     protected static function defaultOptions()
     {
-        return [
-            'integration_enable' => 0,
-            'integration_token' => '',
-            'integration_badge_role' => 'administrator',
-            'analytics_enable' => 0,
-            'analytics_code' => ''
-        ];
+        return Config::get('default_options', []);
     }
 
     /**
@@ -48,11 +40,73 @@ class Options
     {
         $defaults = self::defaultOptions();
 
-        $options = (array) get_option(self::$optionName);
+        $options = (array) get_option(self::getOptionName());
         $options = wp_parse_args($options, $defaults);
         $options = array_intersect_key($options, $defaults);
 
         return (object) $options;
+    }
+
+    /**
+     * Get the analytics code from the central RRZE settings option.
+     *
+     * @return string
+     */
+    public static function getServerAnalyticsCode(): string
+    {
+        $settings = get_site_option(Config::get('rrze_settings_option_name', 'rrze_settings'));
+        $path = Config::get('rrze_settings_analytics_code_path', []);
+        $value = $settings;
+        $i;
+
+        if (!is_array($path)) {
+            return '';
+        }
+
+        for ($i = 0; $i < count($path); $i++) {
+            if (is_object($value) && isset($value->{$path[$i]})) {
+                $value = $value->{$path[$i]};
+            } elseif (is_array($value) && isset($value[$path[$i]])) {
+                $value = $value[$path[$i]];
+            } else {
+                return '';
+            }
+        }
+
+        if (!is_scalar($value)) {
+            return '';
+        }
+
+        return self::sanitizeAnalyticsCode((string) $value);
+    }
+
+    /**
+     * Get the effective analytics code.
+     *
+     * @return string
+     */
+    public static function getAnalyticsCode(): string
+    {
+        $serverCode = self::getServerAnalyticsCode();
+
+        if ($serverCode !== '') {
+            return $serverCode;
+        }
+
+        return self::sanitizeAnalyticsCode(self::getOptions()->analytics_code);
+    }
+
+    /**
+     * Sanitize the analytics code for use in the Siteimprove script URL.
+     *
+     * @param string $code Analytics code.
+     * @return string
+     */
+    public static function sanitizeAnalyticsCode(string $code): string
+    {
+        $code = preg_replace('/[^A-Za-z0-9_-]/', '', sanitize_text_field($code));
+
+        return is_string($code) ? $code : '';
     }
 
     /**
@@ -65,6 +119,6 @@ class Options
      */
     public static function getOptionName(): string
     {
-        return self::$optionName;
+        return Config::get('option_name', 'rrze_siteimprove');
     }
 }

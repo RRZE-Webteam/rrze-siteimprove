@@ -1,29 +1,43 @@
+[![Aktuelle Version](https://img.shields.io/github/package-json/v/rrze-webteam/rrze-siteimprove/main?label=Version)](https://github.com/RRZE-Webteam/rrze-siteimprove)
+[![Release Version](https://img.shields.io/github/v/release/rrze-webteam/rrze-siteimprove?label=Release+Version)](https://github.com/rrze-webteam/rrze-siteimprove/releases/)
+[![GitHub License](https://img.shields.io/github/license/rrze-webteam/rrze-siteimprove)](https://github.com/RRZE-Webteam/rrze-siteimprove)
+[![GitHub issues](https://img.shields.io/github/issues/RRZE-Webteam/rrze-siteimprove)](https://github.com/RRZE-Webteam/rrze-siteimprove/issues)
+
 # RRZE Siteimprove
 
-Komfortable Integration von Siteimprove in WordPress
+Einbindung des Siteimprove Analytics JavaScripts in WordPress.
 
-## Download
+## Contributors
 
-GITHub-Repo: https://github.com/RRZE-Webteam/rrze-siteimprove
+* RRZE-Webteam, http://www.rrze.fau.de
 
-## Autor
-
-RRZE-Webteam , http://www.rrze.fau.de
-
-## Copryright
+## Copyright
 
 GNU General Public License (GPL) Version 3
 
-## Beschreibung
+## Documentation
 
-Das Plugin bindet den Code von Siteimprove ein. Darunter auch den JavaScript-Code für
-die Registrierung einer Website, den optionalen Code für die Aktivierung von Analytics,
-sowie die Angabe der Page-ID der jeweiligen Seiten als Metatag.
+See documenation at https://www.wp.rrze.fau.de
+
+## Feedback
+
+* https://github.com/RRZE-Webteam/rrze-siteimprove/issues
+* webmaster@rrze.fau.de
+
+## Entwicklerhinweise
+
+
+Das Plugin bindet den Siteimprove Analytics-Code ein und ergänzt die Angabe der
+Page-ID der jeweiligen Seiten als Metatag.
+
+Die frühere Siteimprove Overlay-Integration mit Token-Ermittlung, Recheck und Recrawl
+wurde entfernt. Diese Funktion wird inzwischen durch das offizielle Siteimprove
+WordPress-Plugin bereitgestellt.
 
 ## Einstellungen
 
 Die Einstellung sind im Backend von WordPress unter
-Tools › Siteimprove
+Einstellungen › RRZE Siteimprove
 zu finden.
 Auf Multisite-Installationen sind diese nur Superadmins zugänglich.
 

@@ -1,0 +1,1 @@
+jQuery(document).ready(function(e){"use strict";var t,a;"undefined"!=typeof siteanalyze&&siteanalyze.baseUrl&&siteanalyze.code&&((t=document.createElement("script")).type="text/javascript",t.async=!0,t.src=siteanalyze.baseUrl+siteanalyze.code+".js",(a=document.getElementsByTagName("script")[0]).parentNode.insertBefore(t,a))});

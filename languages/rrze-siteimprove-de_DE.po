@@ -1,193 +1,104 @@
-# Copyright (C) 2025 RRZE Webteam
+# Copyright (C) 2026 RRZE Webteam
 # This file is distributed under the GNU General Public License Version 3.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Siteimprove 1.6.5\n"
+"Project-Id-Version: RRZE Siteimprove\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-siteimprove\n"
-"POT-Creation-Date: 2025-08-15T08:28:48+00:00\n"
-"PO-Revision-Date: 2025-08-15 10:46+0200\n"
+"PO-Revision-Date: 2026-09-11 00:00+0200\n"
 "Last-Translator: \n"
-"Language-Team: \n"
+"Language-Team: RRZE-Webteam\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.6\n"
 "X-Domain: rrze-siteimprove\n"
 
-#. Plugin Name of the plugin
-#: rrze-siteimprove.php
 msgid "RRZE Siteimprove"
-msgstr "RRZE-Siteimprove"
+msgstr "RRZE Siteimprove"
 
-#. Plugin URI of the plugin
-#: rrze-siteimprove.php
-msgid "https://github.com/RRZE-Webteam/rrze-siteimprove"
-msgstr "https://github.com/RRZE-Webteam/rrze-siteimprove"
+msgid "Integration of Siteimprove AI Analytics script in websites"
+msgstr "Einbindung des Siteimprove AI Analytics-Scripts in Websites"
 
-#. Description of the plugin
-#: rrze-siteimprove.php
-msgid "Siteimprove integration."
-msgstr "Siteimprove-Integration."
+msgid "The server is running WordPress version %1$s. The plugin requires at least WordPress version %2$s."
+msgstr "Der Server verwendet WordPress-Version %1$s. Das Plugin benötigt mindestens WordPress-Version %2$s."
 
-#. Author of the plugin
-#: rrze-siteimprove.php
-msgid "RRZE Webteam"
-msgstr "RRZE-Webteam"
+msgid "The server is running PHP version %1$s. The plugin requires at least PHP version %2$s."
+msgstr "Der Server verwendet PHP-Version %1$s. Das Plugin benötigt mindestens PHP-Version %2$s."
 
-#. Author URI of the plugin
-#: rrze-siteimprove.php
-msgid "https://www.wp.rrze.fau.de/"
-msgstr "https://www.wp.rrze.fau.de/"
+msgid "Plugins: %1$s: %2$s"
+msgstr "Plugins: %1$s: %2$s"
 
-#: includes/Integration.php:200
-msgid "Siteimprove Recheck"
-msgstr "Siteimprove-Neuprüfung"
+msgid "Settings"
+msgstr "Einstellungen"
 
-#: includes/Settings.php:84 includes/Settings.php:85 includes/Settings.php:107
 msgid "Siteimprove"
 msgstr "Siteimprove"
 
-#: includes/Settings.php:138 includes/Settings.php:355
-msgid "Integration"
-msgstr "Integration"
+msgid "Siteimprove Overlay"
+msgstr "Siteimprove Overlay"
 
-#: includes/Settings.php:146 includes/Settings.php:181
+msgid "Analytics"
+msgstr "Analytics"
+
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: includes/Settings.php:155
-msgid "Token"
-msgstr "Token"
-
-#: includes/Settings.php:164
-msgid "Badge Role"
-msgstr "Badge-Rolle"
-
-#: includes/Settings.php:173 includes/Settings.php:356
-msgid "Analytics"
-msgstr "Analysen"
-
-#: includes/Settings.php:190
 msgid "Code"
-msgstr "Schlüsselcode"
+msgstr "Code"
 
-#: includes/Settings.php:238
-msgid ""
-"You can scan your website for errors as soon as a page is published, "
-"allowing you to fix mistakes, optimize content, and manage your site more "
-"efficiently."
-msgstr ""
-"Sie können Ihre Website auf Fehler überprüfen, sobald Sie eine Webseite "
-"veröffentlicht haben. Auf diese Weise ist es Ihnen möglich, Probleme zu "
-"beheben, Inhalte zu optimieren und Ihre Website effizienter zu verwalten."
+msgid "This integrates the Siteimprove AI Analytics script into the website. Note: This activates the display of a consent banner."
+msgstr "Das Siteimprove AI Analytics-Script wird hiermit in die Website integriert. Hinweis: Dies aktiviert die Schaltung eines Consent Banners."
 
-#: includes/Settings.php:251
-msgid ""
-"Get insight into visitor behavior and optimize your website with powerful "
-"analytics that anyone can use."
-msgstr ""
-"Erhalten Sie Einblick in das Besucherverhalten und optimieren Sie Ihre "
-"Website durch leistungsstarke Analysen, die jeder nutzen kann."
+msgid "The Siteimprove Analytics code is already configured server-side and is therefore not displayed here."
+msgstr "Der Siteimprove Analytics-Code wurde bereits serverseitig gesetzt und wird daher hier nicht angezeigt."
 
-#: includes/Settings.php:252
-msgid ""
-"Use the shortcode [siteimprove_analytics_privacy_policy] to display the "
-"corresponding privacy policy with an opt-out button."
-msgstr ""
-"Den Shortcode [siteimprove_analytics_privacy_policy] verwenden, um die "
-"entsprechende Datenschutzerklärung mit einem Opt-out-Button anzuzeigen."
+msgid "The former Siteimprove Overlay integration, including token retrieval, recheck and recrawl functions, has been replaced by the official Siteimprove WordPress plugin. RRZE Siteimprove now only embeds the Siteimprove Analytics JavaScript."
+msgstr "Die frühere Siteimprove Overlay-Integration inklusive Token-Ermittlung, Recheck und Recrawl wurde durch das offizielle Siteimprove WordPress-Plugin ersetzt. RRZE Siteimprove bindet nur noch das Siteimprove Analytics-JavaScript ein."
 
-#: includes/Settings.php:283
-msgid "Request new token"
-msgstr "Neues Token anfordern"
+msgid "Get insight into visitor behavior and optimize your website with powerful analytics that anyone can use."
+msgstr "Erhalten Sie Einblick in das Besucherverhalten und optimieren Sie Ihre Website mit leistungsstarken Analytics-Funktionen."
 
-#: includes/Settings.php:301
-msgid "User role required to display the Siteimprove Badge."
-msgstr ""
-"Benutzerrolle, die für die Anzeige des Siteimprove-Badge erforderlich ist."
+msgid "Use the shortcode [siteimprove_analytics_privacy_policy] to display the corresponding privacy policy with an opt-out button."
+msgstr "Verwenden Sie den Shortcode [siteimprove_analytics_privacy_policy], um die zugehörige Datenschutzerklärung mit Opt-out-Button auszugeben."
 
-#: includes/Settings.php:333
 msgid "The code that is specific to your account."
-msgstr "Der Schlüsselcode, der für Ihr Konto spezifisch ist."
+msgstr "Der Code, der zu Ihrem Konto gehört."
 
-#: includes/Settings.php:348
 msgid "Overview"
 msgstr "Übersicht"
 
-#: includes/Settings.php:350
 msgid "Siteimprove Help"
-msgstr "Siteimprove Hilfe"
+msgstr "Siteimprove-Hilfe"
 
-#: includes/Settings.php:351
-msgid ""
-"The Siteimprove plugin integrates your WordPress site with your Siteimprove "
-"account. It lets you scan content for errors, monitor quality and "
-"accessibility, and optionally enable Siteimprove Analytics."
-msgstr ""
-"Das Siteimprove-Plugin integriert Ihre WordPress-Website mit Ihrem "
-"Siteimprove-Konto. Es ermöglicht, Inhalte auf Fehler zu prüfen, Qualität und "
-"Barrierefreiheit zu überwachen und optional Siteimprove Analytics zu "
-"aktivieren."
+msgid "RRZE Siteimprove embeds the Siteimprove Analytics JavaScript on your WordPress site."
+msgstr "RRZE Siteimprove bindet das Siteimprove Analytics-JavaScript in Ihre WordPress-Website ein."
 
-#: includes/Settings.php:353
 msgid "Screen Content"
-msgstr "Screen-Inhalt"
+msgstr "Bildschirminhalt"
 
-#: includes/Settings.php:355
-msgid ""
-"Enable Siteimprove, enter your token, and choose which user role can see the "
-"Siteimprove badge."
-msgstr ""
-"Siteimprove aktivieren, Token eingeben und die Benutzerrolle auswählen, die "
-"das Siteimprove-Badge sehen darf."
+msgid "The former overlay functionality is handled by the official Siteimprove WordPress plugin."
+msgstr "Die frühere Overlay-Funktionalität wird durch das offizielle Siteimprove WordPress-Plugin bereitgestellt."
 
-#: includes/Settings.php:356
-msgid ""
-"Enable Analytics, add your Siteimprove code, and use the shortcode "
-"[siteimprove_analytics_privacy_policy] to display a privacy policy with an "
-"opt-out option."
-msgstr ""
-"Analytics aktivieren, den Siteimprove-Code hinzufügen und den Shortcode "
-"[siteimprove_analytics_privacy_policy] verwenden, um eine "
-"Datenschutzerklärung mit Opt-out-Option anzuzeigen."
+msgid "Enable Analytics, add your Siteimprove code, and use the shortcode [siteimprove_analytics_privacy_policy] to display a privacy policy with an opt-out option."
+msgstr "Aktivieren Sie Analytics, hinterlegen Sie Ihren Siteimprove-Code und verwenden Sie den Shortcode [siteimprove_analytics_privacy_policy], um eine Datenschutzerklärung mit Opt-out-Option auszugeben."
 
-#: includes/Settings.php:359
 msgid "Available Actions"
 msgstr "Verfügbare Aktionen"
 
-#: includes/Settings.php:361
-msgid "Enable or disable the Siteimprove integration."
-msgstr "Aktivieren oder Deaktivieren der Siteimprove-Integration."
-
-#: includes/Settings.php:362
-msgid "Request a new token if needed."
-msgstr "Bei Bedarf ein neues Token anfordern."
-
-#: includes/Settings.php:363
-msgid "Choose the minimum role for the badge."
-msgstr "Mindestrolle für das Badge auswählen."
-
-#: includes/Settings.php:364
 msgid "Enable or disable Analytics."
 msgstr "Analytics aktivieren oder deaktivieren."
 
-#: includes/Settings.php:365
 msgid "Add your Analytics code."
 msgstr "Analytics-Code hinzufügen."
 
-#: includes/Settings.php:366
 msgid "Save your changes."
 msgstr "Änderungen speichern."
 
-#: includes/Settings.php:376
 msgid "For more information"
-msgstr "Für mehr Information"
+msgstr "Weitere Informationen"
 
-#: includes/Settings.php:377
 msgid "RRZE Webteam on Github"
-msgstr "RRZE-Webteam in Github"
+msgstr "RRZE-Webteam auf Github"
 
-#: includes/Settings.php:378
 msgid "Visit Siteimprove"
 msgstr "Siteimprove besuchen"

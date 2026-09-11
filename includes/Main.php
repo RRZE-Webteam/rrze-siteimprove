@@ -4,7 +4,6 @@ namespace RRZE\Siteimprove;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Siteimprove\Integration;
 use RRZE\Siteimprove\Settings;
 use RRZE\Siteimprove\Analytics\Analytics;
 use function RRZE\Siteimprove\plugin;
@@ -35,8 +34,6 @@ class Main
     {
         $this->settings = new Settings();
 
-        new Integration();
-
         new Analytics();
 
         add_filter('plugin_action_links_' . plugin()->getBaseName(), [$this, 'settingsLink']);
@@ -54,8 +51,8 @@ class Main
     {
         $settingsLink = sprintf(
             '<a href="%s">%s</a>',
-            admin_url('tools.php?page=' . $this->settings->getMenuSlug()),
-            __('Settings', 'rrze-jobspreader-analytics')
+            esc_url(admin_url('options-general.php?page=' . $this->settings->getMenuSlug())),
+            esc_html__('Settings', 'rrze-siteimprove')
         );
         array_unshift($links, $settingsLink);
         return $links;
@@ -71,7 +68,7 @@ class Main
     public function headMeta()
     {
         if (is_singular() && $post = get_queried_object()) {
-            printf('<meta name="pageID" content="%d">%s', $post->ID, PHP_EOL);
+            printf('<meta name="pageID" content="%d">%s', absint($post->ID), PHP_EOL);
         }
     }
 }
